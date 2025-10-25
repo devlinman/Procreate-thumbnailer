@@ -4,7 +4,7 @@ use std::io::Read;
 use std::path::Path;
 
 use zip::ZipArchive;
-use image::{DynamicImage, ImageOutputFormat, GenericImageView, RgbaImage};
+use image::{ImageOutputFormat};
 
 fn main() {
     if let Err(e) = run() {
@@ -17,8 +17,6 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let mut args = env::args().skip(1);
     let input = args.next().ok_or("Missing input path/URI")?;
     let output = args.next().ok_or("Missing output path")?;
-    let size_str = args.next().unwrap_or_else(|| "256".to_string());
-    let size: u32 = size_str.parse().map_err(|_| "Size must be an integer")?;
 
     let input_path = uri_to_path(&input)?;
     let file = File::open(&input_path)
@@ -59,9 +57,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         if let Some((idx, _)) = entries.iter().find(|(_, name)| {
             let low = name.to_lowercase();
             low.starts_with("quicklook/")
-            && (low.ends_with(".png")
-            || low.ends_with(".jpg")
-            || low.ends_with(".jpeg"))
+            && (low.ends_with(".png") || low.ends_with(".jpg") || low.ends_with(".jpeg"))
         }) {
             found_index = Some(*idx);
         }
@@ -76,16 +72,14 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     file.read_to_end(&mut buf)
     .map_err(|e| format!("Failed to read thumbnail data: {}", e))?;
 
+    // Just load the image as-is
     let img = image::load_from_memory(&buf)
     .map_err(|e| format!("Failed to decode image: {}", e))?;
 
-    let out_img = resize_to_max(img, size);
-
     let out_path = Path::new(&output);
-    let mut out_file =
-    File::create(out_path).map_err(|e| format!("Failed to create output file {:?}: {}", out_path, e))?;
-    out_img
-    .write_to(&mut out_file, ImageOutputFormat::Png)
+    let mut out_file = File::create(out_path)
+    .map_err(|e| format!("Failed to create output file {:?}: {}", out_path, e))?;
+    img.write_to(&mut out_file, ImageOutputFormat::Png)
     .map_err(|e| format!("Failed to write PNG: {}", e))?;
 
     Ok(())
@@ -104,16 +98,4 @@ fn uri_to_path(input: &str) -> Result<String, Box<dyn std::error::Error>> {
     } else {
         Ok(input.to_string())
     }
-}
-
-/// Resize so both width and height ≤ max_dim, preserving aspect ratio.
-fn resize_to_max(img: DynamicImage, max_dim: u32) -> DynamicImage {
-    let (w, h) = img.dimensions();
-    if w <= max_dim && h <= max_dim {
-        return img;
-    }
-
-    // thumbnail() already preserves aspect ratio
-    let thumb: RgbaImage = image::imageops::thumbnail(&img, max_dim, max_dim);
-    DynamicImage::ImageRgba8(thumb)
 }

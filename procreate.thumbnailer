@@ -1,4 +1,4 @@
 [Thumbnailer Entry]
 TryExec=procreate-thumbnailer
-Exec=procreate-thumbnailer %i %o %s
-MimeType=image/procreate
+Exec=procreate-thumbnailer %i %o
+MimeType=application/x-procreate

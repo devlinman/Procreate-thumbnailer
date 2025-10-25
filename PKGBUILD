@@ -1,5 +1,3 @@
-# Maintainer: Surya <you@example.com>
-
 pkgname=procreate-thumbnailer
 pkgver=1.0.0
 pkgrel=1
@@ -10,9 +8,6 @@ depends=('shared-mime-info')
 makedepends=('cargo' 'rust')
 install=procreate-thumbnailer.install
 
-# Use local directory as source for development builds
-source=(".")
-noextract=(".")
 
 build() {
     cd "$srcdir"
@@ -21,17 +16,13 @@ build() {
 }
 
 package() {
-    cd "$srcdir"
+    cd "$srcdir/../"
+    # Ensure directories exist
+    install -d "$pkgdir/usr/bin"
 
-    echo ">>> Installing binary..."
-    install -Dm755 "target/release/procreate-thumbnailer" \
-        "$pkgdir/usr/local/bin/procreate-thumbnailer"
+    install -Dm755 "target/release/procreate-thumbnailer" "$pkgdir/usr/bin/procreate-thumbnailer"
 
-    echo ">>> Installing thumbnailer descriptor..."
-    install -Dm644 "procreate.thumbnailer" \
-        "$pkgdir/usr/share/thumbnailers/procreate.thumbnailer"
+    install -Dm644 "procreate.thumbnailer" "$pkgdir/usr/share/thumbnailers/procreate.thumbnailer"
 
-    echo ">>> Installing MIME XML..."
-    install -Dm644 "procreate.xml" \
-        "$pkgdir/usr/share/mime/packages/procreate.xml"
+    install -Dm644 "procreate.xml" "$pkgdir/usr/share/mime/packages/procreate.xml"
 }
