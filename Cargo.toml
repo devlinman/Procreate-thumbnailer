@@ -1,0 +1,8 @@
+[package]
+name = "procreate-thumbnailer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+zip = "0.6"
+image = "0.24"

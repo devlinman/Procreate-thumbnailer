@@ -1,0 +1,15 @@
+#!/bin/bash
+
+post_install() {
+    echo ">>> Updating MIME database..."
+    update-mime-database /usr/share/mime > /dev/null
+}
+
+post_upgrade() {
+    post_install
+}
+
+post_remove() {
+    echo ">>> Cleaning MIME database..."
+    update-mime-database /usr/share/mime > /dev/null
+}
