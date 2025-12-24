@@ -11,20 +11,59 @@
 
 
 ## Installation
-### For Arch
-- Download the package and run `$ makepkg -si` in the folder containing `PKGBUILD`.
-- Installs binary file in `/usr/share/bin`.
-- Alternatively you can generate a tarball to distribute it, and install it using `$ pacman -U`.
+### For Arch Linux:
+- Now available as an **AUR** package.
 
-### For other linux distributions
+`$ yay -S procreate-thumbnailer-git`
+
+- I encourage you to go through the `PKGBUILD` first.
+
+### Alternate:
+- Download the `PKGBUILD` from **AUR** 
+
+`yay -G procreate-thumbnailer-git	`
+
+and run:
+
+`$ makepkg -si`
+
+ in the folder containing `PKGBUILD`. 
+ 
+- Installs binary file in `/usr/share/bin`.
+- Alternatively you can generate a tarball to distribute it, and install it using 
+
+`$ pacman -U`.
+
+### Build from source code/For other linux distributions:
 - Main rust app works for any distro.
+- Build the rust app with 
+
+`$ cargo build`
+
+- Install in your path with cargo: 
+
+`$ cargo install --path .`
+
 - `procreate.xml` and `procreate.thumbnailer` files need to be installed manually.
 
-## Uninstall
+## Uninstall (Arch)
 - `$ pacman -R procreate-thumbnailer`
 
 ## Quirks
 - Currently, there is no support for thumbnail size.
+
+# IMPORTANT  
+- **YOU MUST ENABLE THE FILE MANAGER TO SHOW PREVIEWS FOR "PROCREATE ARTWORK" FILES IN ITS SETTINGS.**
+- For example, in `dolphin (KDE)` file manager:
+
+```Settings (Ctrl+Shift+,) > Interface > Previews > [✔️] Procreate Artwork```
+
+---
+
+# AUR
+- [AUR Link for the package](https://aur.archlinux.org/packages/procreate-thumbnailer-git)
+- Please find the `PKGBUILD` file in the AUR.
+- The `PKGBUILD` file previously in this repo is no longer supported (To avoid ambiguity).
 
 ---
 

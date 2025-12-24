@@ -1,22 +1,26 @@
-pkgname=procreate-thumbnailer
-pkgver=1.0.0
+# Maintainer: devlinman <dev.linman.tech@gmail.com>
+pkgname='procreate-thumbnailer'
+pkgver=1.0.1
 pkgrel=1
-pkgdesc="Thumbnailer for Procreate (.procreate) files"
+pkgdesc="Thumbnailer for Procreate (.procreate) files."
 arch=('x86_64')
 license=('MIT')
+url='https://github.com/devlinman/Procreate-thumbnailer.git'
 depends=('shared-mime-info')
 makedepends=('cargo' 'rust')
 install=procreate-thumbnailer.install
+source=('https://github.com/devlinman/Procreate-thumbnailer.git')
+md5sums=('SKIP')
 
-
+# pkgver()
 build() {
-    cd "$srcdir"
+    cd "$pkgname"
     echo ">>> Building Rust binary..."
     cargo build --release
 }
 
 package() {
-    cd "$srcdir/../"
+    cd "$pkgname"
     # Ensure directories exist
     install -d "$pkgdir/usr/bin"
 
@@ -25,4 +29,6 @@ package() {
     install -Dm644 "procreate.thumbnailer" "$pkgdir/usr/share/thumbnailers/procreate.thumbnailer"
 
     install -Dm644 "procreate.xml" "$pkgdir/usr/share/mime/packages/procreate.xml"
+
+    echo -e "\n \e[31;1m  ENABLE PREVIEWS FOR \"PROCREATE ARTWORK\" IN YOUR FILE MANAGER. \e[0m \n"
 }
